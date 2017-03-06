@@ -9,7 +9,6 @@
 </template>
 <script>
   import headComp from './components/commonpage/headComp'
-  import menuBtn from './components/commonpage/menuBtn'
   import loadComp from './components/commonpage/loading'
 
   export default {
@@ -26,7 +25,6 @@
     },
     components: {
       headComp,
-      menuBtn,
       loadComp
     }
   }
