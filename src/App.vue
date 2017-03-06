@@ -4,13 +4,12 @@
     <transition name="fade-left">
         <router-view class="router-view"></router-view>
     </transition>
-    <back-top></back-top>
     <load-comp :loadShow="isAppShow"></load-comp>
   </div>
 </template>
 <script>
   import headComp from './components/commonpage/headComp'
-  import backTop from './components/commonpage/backTopComp'
+  import menuBtn from './components/commonpage/menuBtn'
   import loadComp from './components/commonpage/loading'
 
   export default {
@@ -27,7 +26,7 @@
     },
     components: {
       headComp,
-      backTop,
+      menuBtn,
       loadComp
     }
   }
@@ -36,10 +35,12 @@
 <style lang="less">
   @import url("./assets/css/m-reset.less");
   .router-view {
-    margin-top: 137px;
+    position: absolute;
+    top: 20%;
+    height: 80%;
     background: #fff;
     width: 100%;
-    height: auto;
+    overflow:hidden;
   }
   .fade-left-enter-active,
   .fade-left-leave-active{
