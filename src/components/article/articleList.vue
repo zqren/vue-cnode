@@ -116,7 +116,6 @@
             //用于设置速度差，产生缓动的效果
             var speed = Math.floor(-osTop / 6)
             this.$refs.articleRef.scrollTop = osTop + speed
-            this.isTop = true;  //用于阻止滚动事件清除定时器
             if(osTop == 0){
                 this.backTopShow = false
                 clearInterval(this.timer)
