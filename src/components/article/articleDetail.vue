@@ -333,6 +333,7 @@
           border: 1px solid gainsboro;
           border-radius: 0;
           -webkit-tap-highlight-color: transparent;
+          outline: none;
         }
         input.btn{
           height: 32px;
