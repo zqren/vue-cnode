@@ -10,7 +10,7 @@
         </div>
         <div class="leder">
             <ul>
-                <li v-for="nav in navs" class="leder-li">
+                <li v-for="(nav,index) in navs" class="leder-li">
                     <router-link :to="nav.path" class="leder-a" tag="a">{{nav.name}}</router-link>
                 </li>
             </ul>
@@ -68,8 +68,8 @@
           path: '/',
           name: '首页'
         }, {
-          path: '/login',
-          name: '新手入门'
+          path: '/topic/create',
+          name: '发布话题'
         }, {
           path: '/login',
           name: 'API'
@@ -86,7 +86,11 @@
       }
     },
     created(){
-
+        if(localStorage.getItem('username')){
+            this.navs[this.navs.length-1].name="退出"
+        }else{
+            this.navs[this.navs.length-1].name="登录"
+        }
     },
     methods: {
     },

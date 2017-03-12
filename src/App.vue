@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <head-comp></head-comp>
-    <transition name="fade-left">
+    <transition name="fade-opac">
         <router-view class="router-view"></router-view>
     </transition>
     <load-comp :loadShow="isAppShow"></load-comp>
@@ -9,6 +9,7 @@
 </template>
 <script>
   import headComp from './components/commonpage/headComp'
+  import menuBtn from './components/commonpage/menuBtn'
   import loadComp from './components/commonpage/loading'
 
   export default {
@@ -25,6 +26,7 @@
     },
     components: {
       headComp,
+      menuBtn,
       loadComp
     }
   }
@@ -40,12 +42,12 @@
     width: 100%;
     overflow:hidden;
   }
-  .fade-left-enter-active,
-  .fade-left-leave-active{
+  .fade-opac-enter-active,
+  .fade-opac-leave-active{
     transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
-  .fade-left-enter,
-  .fade-left-leave-active{
+  .fade-opac-enter,
+  .fade-opac-leave-active{
     opacity: 0;
     transform: scale(.5);
   }
