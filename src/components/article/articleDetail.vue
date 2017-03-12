@@ -47,7 +47,7 @@
         <!--评论-->
         <form class="article-comment" @submit.prevent="createReplies">
             <textarea v-model="createReplyContent" class="comment-content" placeholder="输入回复内容"></textarea>
-            <input type="submit" :disabled="!createReplyContent.length" :class="{active:!createReplyContent.length}" class="btn" value="提交">
+            <input type="submit" :disabled="!createReplyContent.length" :class="{active:createReplyContent.length}" class="btn" value="提交">
         </form>
         <back-top :isBackTopShow="isDTopShow" @backTop="detailTop"></back-top>
         <load-comp :loadShow="isDShow"></load-comp>
@@ -331,15 +331,20 @@
           padding: 5px;
           box-sizing: border-box;
           border: 1px solid gainsboro;
+          border-radius: 0;
+          -webkit-tap-highlight-color: transparent;
         }
         input.btn{
           height: 32px;
           flex-basis: 25%;
           border: none;
-          background: #1d92ed;
+          background: rgba(29,146,137,.5);
           color: #fff;
+          border-radius: 0;
+          -webkit-tap-highlight-color: transparent;
           &.active{
-            opacity: .5;
+            background: #1d92ed;
+            color: #fff;
           }
         }
       }
