@@ -20,7 +20,7 @@
 <style lang="less">
     .top { //class="top"的样式
         position: fixed;
-        top: 0px;
+        top: 0;
         width: 100%;
         height: 20%;
         overflow: hidden;
@@ -48,7 +48,7 @@
         .leder {
             .leder-li {
                 display: inline-block;
-                padding: 20px 3% 20px 3%;
+                padding: 10px 3%;
                 &:hover {
                     opacity: 0.3;
                 }
