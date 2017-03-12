@@ -36,7 +36,7 @@
                     <div class="floor">{{index+1}}楼</div>
                     <div class="time">{{reply.create_at | getTime}}</div>
                     <div class="icon">
-                        <span class="iconfont icon-zan-copy"></span>
+                        <span @click="replyUps(reply.id,$event)" class="iconfont icon-zan_light"></span>
                         <span>{{reply.ups.length}}</span>
                         <span class="iconfont icon-huifu1"></span>
                     </div>
@@ -46,7 +46,7 @@
         </div>
         <!--评论-->
         <form class="article-comment" @submit.prevent="createReplies">
-            <textarea v-model="createReplyContent" class="comment-content" placeholder="输入回复内容"></textarea>
+            <textarea v-model = "createReplyContent" class="comment-content" placeholder="输入回复内容"></textarea>
             <input type="submit" :disabled="!createReplyContent.length" :class="{active:createReplyContent.length}" class="btn" value="提交">
         </form>
         <back-top :isBackTopShow="isDTopShow" @backTop="detailTop"></back-top>
@@ -72,6 +72,7 @@
     },
     created(){
       this.getArticleDetail()
+      this.isFill()
     },
     methods:{
       getArticleDetail(){
@@ -134,17 +135,44 @@
        },
        createReplies(){
           this.$http.post(`/topic/${this.$route.params.id}/replies`,{
-               accesstoken:ACCESS_TOKEN,
+               accesstoken: ACCESS_TOKEN,
                content: this.createReplyContent
           })
           .then((res)=>{
-              this.createReplyContent = ""
+              this.createReplyContent = ''
+              console.log(res.data)
               this.getArticleDetail()
-              this.$refs.articleDetail.scrollTop =  this.$refs.articleDetail.scrollHeight +42
+              this.$refs.articleDetail.scrollTop =  this.$refs.articleDetail.scrollHeight
           })
           .catch((error)=>{
               console.log(error)
           })
+       },
+       replyUps(id,event){
+          this.$http.post(`/reply/${id}/ups`,{
+              accesstoken: ACCESS_TOKEN
+          })
+          .then((res) => {
+             if(res.data.action == 'up'){
+                event.target.classList.remove('icon-zan_light')
+                event.target.classList.add('icon-zan_fill')
+             }else if(res.data.action == 'down'){
+                event.target.classList.remove('icon-zan_fill')
+                event.target.classList.add('icon-zan_light')
+             }
+             this.getArticleDetail()
+             console.log(res.data)
+          })
+          .catch((error)=>{
+             console.log(error)
+          })
+       },
+       isFill(arr){
+          if(arr){
+            arr.some((data)=>{
+              return data == localStorage.getItem('userid')
+            })
+          }
        },
        diplayBackTop(event){
           var evTop = event.target.scrollTop
@@ -333,13 +361,14 @@
           border: 1px solid gainsboro;
           border-radius: 0;
           -webkit-tap-highlight-color: transparent;
+          box-shadow: none;
           outline: none;
         }
         input.btn{
           height: 32px;
           flex-basis: 25%;
           border: none;
-          background: rgba(29,146,137,.5);
+          background: rgba(29,146,237,.5);
           color: #fff;
           border-radius: 0;
           -webkit-tap-highlight-color: transparent;
