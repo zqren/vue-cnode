@@ -1,12 +1,12 @@
 <template>
    <div>
        <transition name="opac">
-           <article-detail v-if="$route.params.id != 'create'"></article-detail>
-           <create-topic v-if="$route.params.id == 'create'"></create-topic>
+           <topic-detail v-if="$route.params.id != 'create'"></topic-detail>
+           <topic-Create v-if="$route.params.id == 'create'"></topic-Create>
        </transition>
    </div>
 </template>
-<style rel="stylesheet/less" lang="less">
+<style rel="stylesheet/less" lang="less" scroped>
     .opac-enter-active,
     .opac-leave-active{
         transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
@@ -18,8 +18,8 @@
     }
 </style>
 <script>
-    import articleDetail from './articleDetail'
-    import createTopic from './createTopic'
+    import topicDetail from './topicDetail'
+    import topicCreate from './topicCreate'
 
     export default{
         data(){
@@ -28,8 +28,8 @@
             }
         },
         components:{
-            articleDetail,
-            createTopic
+            topicDetail,
+            topicCreate
         }
     }
 </script>

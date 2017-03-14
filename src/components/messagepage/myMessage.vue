@@ -65,8 +65,8 @@
 <style lang="less">
     .my-message {
       width: 100%;
-      height: 32px;
-      line-height: 32px;
+      height: 42px;
+      line-height: 42px;
       text-align: left;
       padding-left: 10px;
       box-sizing: border-box;

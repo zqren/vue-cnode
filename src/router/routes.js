@@ -3,9 +3,6 @@
  */
 
 //app.vue的router-view
-//import article from '../components/article/articleComp'
-//import login from '../components/login/login'
-//import articleDetail from '../components/article/articleDetail.vue'
 
 const routes = [{
     path: '/',
@@ -22,7 +19,7 @@ const routes = [{
   path: '/topic/:id',
   name:'topic',
   component: (resolve)=>{
-    require(['../components/article/topicComp.vue'],resolve)
+    require(['../components/topics/topicComp.vue'],resolve)
   },
   meta:{
     requiresAuth: true
