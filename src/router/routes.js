@@ -46,7 +46,16 @@ const routes = [{
   name: 'message',
   component: function(resolve){
     require(['../components/messagepage/message'],resolve)
-  }
+  },
+  children:[{
+    path:'readmessage',
+    name:'readmessage',
+    component:require('../components/messagepage/messageDetail')
+  },{
+    path:'unreadmessage',
+    name:'unreadmessage',
+    component:require('../components/messagepage/messageDetail')
+  }]
 },{
     path: '/user/:id',
     name:'user',
@@ -54,7 +63,7 @@ const routes = [{
     children:[{
       path:'collections',
       name:'collections',
-      component:require('../components/user/usercollect.vue')
+      component:require('../components/user/userInfo/userCollect.vue')
     }]
   }]
 
