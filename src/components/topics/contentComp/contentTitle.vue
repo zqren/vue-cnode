@@ -13,7 +13,7 @@
             <span class="dot">最后编辑于 {{topics.last_reply_at | getTime}}</span>
             <span class="dot">{{topics.visit_count}} 浏览</span>
             <span v-show="isDShow" class="iconfont icon-jiazai" style="font-size:10px"></span>
-            <span v-show="!isDShow" @click="collectTopic">{{isCollectTopic?'已收藏':'收藏'}}</span>
+            <span v-show="!isDShow" @click="collect">{{isCollectTopic?'已收藏':'收藏'}}</span>
         </div>
     </div>
 </template>
@@ -75,15 +75,39 @@
     }
 </style>
 <script>
-    
+
     export default{
         data(){
             return{
-               
+
             }
         },
-        components:{
-            
+        props:{
+          author:{
+            type:Object,
+            default:()=>{
+              return ''
+            }
+          },
+          topics:{
+            type:Object,
+            default:()=>{
+              return ''
+            }
+          },
+          isDShow:{
+            type: Boolean,
+            default: false
+          },
+          isCollectTopic:{
+            type: Boolean,
+            default: false
+          }
+        },
+        methods:{
+          collect(){
+            this.$emit('collect')
+          }
         }
     }
 </script>

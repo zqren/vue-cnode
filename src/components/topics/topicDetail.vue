@@ -1,39 +1,25 @@
 <template>
-    <div ref="articleDetail" @scroll="diplayBackTop($event)" class="article-detail">
+    <div ref="articleDetail" @scroll="displayBackTop($event)" class="article-detail">
         <!--标题信息-->
-        <content-title></content-title>
+        <content-title :author="author"
+                       :topics="topics"
+                       :isDShow="isDShow"
+                       :isCollectTopic="isCollectTopic"
+                       @collect="collectTopic"
+        ></content-title>
         <!--内容详情-->
-        <div class="article-content">
-            <div v-html="topics.content"></div>
-        </div>
+        <content-detail :topics="topics"></content-detail>
         <!--回复-->
-        <div class="article-reply">
-            <span class="reply-count">{{replies.length}}条回复</span>
-            <div class="reply-content" v-for="(reply,index) in replies">
-                <div class="header">
-                    <div class="author-avatar">
-                        <img :src="reply.author.avatar_url">
-                    </div>
-                    <div class="name">
-                        {{reply.author.loginname}}
-                    </div>
-                    <div class="floor">{{index+1}}楼</div>
-                    <div class="time">{{reply.create_at | getTime}}</div>
-                    <div class="icon">
-                        <span @click="replyUps(reply.id,$event)" class="iconfont icon-zan_light"></span>
-                        <span>{{reply.ups.length}}</span>
-                        <span class="iconfont icon-huifu1"></span>
-                    </div>
-                </div>
-                <div class="content" v-html="reply.content"></div>
-            </div>
-        </div>
+        <content-reply :replies="replies"
+                       @replyUps="getUps"
+        ></content-reply>
         <!--评论-->
-        <form class="article-comment" @submit.prevent="createReplies">
-            <textarea v-model = "createReplyContent" class="comment-content" placeholder="输入回复内容"></textarea>
-            <input type="submit" :disabled="!createReplyContent.length" :class="{active:createReplyContent.length}" class="btn" value="提交">
-        </form>
+        <content-comment :createReplyContent="createReplyContent"
+                         v-model="createReplyContent"
+                         @createReplies="submitReplies"></content-comment>
+        <!--返回顶部-->
         <back-top :isBackTopShow="isDTopShow" @backTop="detailTop"></back-top>
+        <!--加载页面-->
         <load-comp :loadShow="isDShow"></load-comp>
     </div>
 </template>
@@ -41,6 +27,9 @@
   import loadComp from '../commonpage/loading'
   import backTop from '../commonpage/backTop'
   import contentTitle from './contentComp/contentTitle'
+  import contentDetail from './contentComp/contentDetail'
+  import contentReply from './contentComp/contentReply'
+  import contentComment from './contentComp/contentComment'
 
   import { ACCESS_TOKEN } from '../../config'
 
@@ -58,26 +47,25 @@
     },
     created(){
       this.getArticleDetail()
-      this.isFill()
     },
     methods:{
-      getArticleDetail(){
-         this.$http.get(`/topic/${this.$route.params.id}`,{
+        getArticleDetail(){
+          this.$http.get(`/topic/${this.$route.params.id}`,{
             params:{
                 accesstoken: ACCESS_TOKEN
             }
-         })
-         .then((data)=>{
+          })
+          .then((data)=>{
              this.author = data.data.data.author
              this.topics = data.data.data
              this.replies = data.data.data.replies
              this.isCollectTopic = data.data.data.is_collect
              this.isDShow = false
-         })
-         .catch((error)=>{
+          })
+          .catch((error)=>{
             console.log(error)
-         })
-       },
+          })
+        },
        collectTopic(){
           if(this.isCollectTopic){
             this.deCollected()
@@ -119,14 +107,13 @@
                 console.groupEnd()
           })
        },
-       createReplies(){
+       submitReplies(){
           this.$http.post(`/topic/${this.$route.params.id}/replies`,{
                accesstoken: ACCESS_TOKEN,
                content: this.createReplyContent
           })
           .then((res)=>{
               this.createReplyContent = ''
-              console.log(res.data)
               this.getArticleDetail()
               this.$refs.articleDetail.scrollTop =  this.$refs.articleDetail.scrollHeight
           })
@@ -134,7 +121,7 @@
               console.log(error)
           })
        },
-       replyUps(id,event){
+       getUps(id,event){
           this.$http.post(`/reply/${id}/ups`,{
               accesstoken: ACCESS_TOKEN
           })
@@ -153,14 +140,7 @@
              console.log(error)
           })
        },
-       isFill(arr){
-          if(arr){
-            arr.some((data)=>{
-              return data == localStorage.getItem('userid')
-            })
-          }
-       },
-       diplayBackTop(event){
+       displayBackTop(event){
           var evTop = event.target.scrollTop
           if(evTop > 100) this.isDTopShow = true
           else this.isDTopShow = false
@@ -179,6 +159,9 @@
     },
     components: {
         contentTitle,
+        contentDetail,
+        contentReply,
+        contentComment,
         loadComp,
         backTop
     }
@@ -192,124 +175,5 @@
         overflow-y: scroll;
         padding: 5px 10px;
         box-sizing: border-box;
-
-        .article-content {
-            margin: 10px auto;
-            width: 100%;
-        }
-        .article-reply {
-            border-top: 1px solid #999;
-            width: 100%;
-            padding-bottom: 32px;
-            box-sizing: border-box;
-            span.reply-count {
-                display: block;
-                width: 100%;
-                color: #666;
-                margin: 5px auto;
-                font-size: 14px;
-            }
-            .reply-content {
-                width: 100%;
-                border-bottom: 1px solid gainsboro;
-                div.header {
-                    padding: 4px 0;
-                    box-sizing: border-box;
-                    width: 100%;
-                    display: flex;
-                    flex-flow: row nowrap;
-                    align-items: center;
-                    div.author-avatar {
-                        flex-grow: 0;
-                        width: 20px;
-                        height: 20px;
-                        text-align: center;
-                        line-height: 20px;
-                        border-radius: 50%;
-                        background: #f1f1f0;
-                        img {
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                        }
-                    }
-                    div.name{
-                        flex-grow: 0;
-                        margin-right: 10px;
-                        margin-left: 10px;
-                    }
-                    div.floor{
-                        flex-grow: 0;
-                        color:  #0088cc;
-                        position: relative;
-                        &:after{
-                            content:'';
-                            position: absolute;
-                            right:-8px;
-                            top:8px;
-                            background:  #0088cc;
-                            width: 5px;
-                            height: 5px;
-                            border-radius: 50%;
-                        }
-                    }
-                    div.time{
-                        flex-grow: 0;
-                        margin-left: 10px;
-                        color: #0088cc;
-                    }
-                    div.icon{
-                        flex-grow: 1;
-                        text-align: right;
-                        span{
-                            margin: 0;
-                            &:last-child{
-                                margin-left: 10px;
-                            }
-                        }
-                    }
-                }
-                .content{
-                    padding: 4px 0;
-                    box-sizing: border-box;
-                }
-            }
-
-        }
-      .article-comment{
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        height: 32px;
-        margin-left: -10px;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: space-between;
-        textarea.comment-content{
-          flex-basis: 75%;
-          height: 32px;
-          padding: 5px;
-          box-sizing: border-box;
-          border: 1px solid gainsboro;
-          border-radius: 0;
-          -webkit-tap-highlight-color: transparent;
-          box-shadow: none;
-          outline: none;
-        }
-        input.btn{
-          height: 32px;
-          flex-basis: 25%;
-          border: none;
-          background: rgba(29,146,237,.5);
-          color: #fff;
-          border-radius: 0;
-          -webkit-tap-highlight-color: transparent;
-          &.active{
-            background: #1d92ed;
-            color: #fff;
-          }
-        }
-      }
     }
 </style>

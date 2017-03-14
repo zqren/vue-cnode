@@ -126,7 +126,7 @@
 </style>
 <script>
     import { ACCESS_TOKEN } from '../../config'
-    import actionSheet from '../commonpage/actionSheet'
+    import actionSheet from './actionSheet'
 
     export default {
       data(){
