@@ -1,21 +1,24 @@
 <template>
     <div class="user-profile">
-        <span class="title">用户信息</span>
-        <div class="user-info">
-            <div class="user-avar">
-                <img :src="usersInfo.avatar_url">
+        <span class="title">{{title}}</span>
+        <div v-for="topic in topics" class="user-topic">
+            <div class="topic-title">
+                <div v-if="topic.good || topic.top" class="tab">
+                    <span>{{topic.tab | getTabName(topic.top,topic.good)}}</span>
+                </div>
+                <div class="title">{{topic.title}}</div>
             </div>
-            <div class="user-name">{{usersInfo.loginname}}</div>
-            <div class="user-score">{{usersInfo.score}}积分</div>
+            <div class="topic-name">
+                <div class="author-name">{{topic.author.loginname}}</div>
+                <div class="create-time">{{topic.create_at || topic.last_reply_at | getTime}}</div>
+            </div>
         </div>
-        <div class="regis-time">注册于：{{usersInfo.create_at | getTime}}</div>
     </div>
 </template>
-<style rel="stylesheet/less" lang="less">
+<style rel="stylesheet/less" lang="less" scoped>
     .user-profile{
         width: 100%;
         height: auto;
-        border-bottom: 1px solid gainsboro;
         span.title{
             display: block;
             background: rgba(43, 43, 43, 0.09);
@@ -24,68 +27,87 @@
             color: #666;
             font-size: 10px;
         }
-        .user-info{
+        .user-topic{
             width: 100%;
-            height: auto;
             background: #fff;
-            border-top: 1px solid gainsboro;
-            color: #666;
-            font-size: 12px;
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 2px 5px;
-            box-sizing: border-box;
-            div.user-avar{
-                width: 15px;
-                height: 15px;
-                border-radius: 50%;
-                background: gainsboro;
-                overflow: hidden;
-                img{
-                    width: 100%;
+            height: auto;
+            &:not(:last-child){
+                border-bottom: 1px solid gainsboro;
+            }
+            .topic-title{
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 5px 0;
+                box-sizing: border-box;
+                .tab{
+                    width: auto;
+                    text-align: center;
+                    margin-left:10px;
+                    margin-right: 0px;
+                    span{
+                        display: inline-block;
+                        width: auto;
+                        height: auto;
+                        padding: 2px 5px;
+                        box-sizing: border-box;
+                        border-radius: 3px;
+                        background: #80bd01;
+                        color: #fff;
+                        font-size: 8px;
+                    }
+                }
+                .title{
+                    flex-grow: 1;
+                    flex-basis: 80%;
+                    padding-left: 10px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
             }
-            div.user-name,
-            div.user-score{
-                margin: 0 10px;
-                flex-basis: auto;
+            .topic-name{
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-around;
+                align-items: center;
+                font-size: 12px;
+                color: #cccccc;
+                div{
+                    flex-basis: 50%;
+                    flex-grow: 1;
+
+                    &.author-name{
+                        text-align: left;
+                        padding-left: 10px;
+                    }
+                    &.create-time{
+                        text-align: right;
+                        padding-right: 10px;
+                    }
+                }
             }
-        }
-        .regis-time{
-            width: 100%;
-            padding: 2px 5px;
-            box-sizing: border-box;
-            color:#666;
-            font-size: 12px;
         }
     }
 </style>
 <script>
-    
+
     export default{
         data(){
             return{
-                usersInfo:{}
+              collectTopics:[]
             }
         },
-        created(){
-            this.getUserInfo()
-        },
-        methods:{
-            getUserInfo(){
-                this.$http.get(`/user/${this.$route.params.id}`)
-                .then((res)=>{
-                   this.usersInfo = res.data.data
-                })
-                .catch((error)=>{
-                    console.log(error)
-                })
-            }
-        },
-        components:{
-            
+        props:{
+           title:{
+              type:String,
+              default:''
+           },
+           topics:{
+               type:Array,
+               default:[]
+           }
         }
     }
 </script>

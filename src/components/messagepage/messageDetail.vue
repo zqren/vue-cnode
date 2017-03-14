@@ -61,8 +61,8 @@
       background: #dcdcdc;
       .back-btn{
          width: 100%;
-         height: 32px;
-         line-height: 32px;
+         height: 42px;
+         line-height: 42px;
          color: #666;
          font-size: 14px;
          padding-left: 10px;
