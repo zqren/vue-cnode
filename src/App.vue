@@ -2,7 +2,7 @@
   <div id="app">
     <head-comp></head-comp>
     <transition name="fade-opac">
-        <router-view class="router-view"></router-view>
+        <router-view v-if="ifWait" class="router-view"></router-view>
     </transition>
     <load-comp :loadShow="isAppShow"></load-comp>
   </div>
@@ -15,13 +15,19 @@
   export default {
     data() {
       return {
-        isAppShow:true
+        isAppShow:true,
+        ifWait:false
       }
     },
     beforeCreate(){
        this.isAppShow = true
     },
     created(){
+      setTimeout(()=>{
+        this.ifWait = true
+      },0)
+    },
+    mounted(){
       this.isAppShow = false
     },
     components: {
